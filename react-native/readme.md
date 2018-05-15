@@ -19,7 +19,9 @@ web app 是为弥补 native app 的缺陷而产生的新名词。web app 和 web
 
 以 youtube 为例，左图是 web app，右图是 native app
 
+<p align="center">
 <img src="https://www.hkitblog.com/wp-content/uploads/2015/11/Webapp_20151109_01.jpg" width="500px">
+</p>
 
 web app 相对 native 要慢一些，因为它隔着一层浏览器。但：
 
@@ -54,7 +56,9 @@ react native，顾名思义，是用 react 写 native app（原本都是用 obje
 
 react native 的简单框架见下图：在不同的平台上（web、ios、android）上，用户编写基于 react 的代码，操作的是 virtual dom（lightweight representation of the document）。通过**不同的渲染引擎**生成不同平台下的 UI，**JS 和 native 之间通过 bridge 通信**
 
+<p align="center">
 <img src="https://upload-images.jianshu.io/upload_images/2428275-29d1662bcaddbcc2.png" width="300px" />
+</p>
 
 react native 对原生组件（eg. ios 的 `UITabBar` 和 Android 的 `Drawer`）作了封装，使用对应的React component，就可以轻松地把这些原生组件整合到你的React Native应用中， 例如TabBarIOS和DrawerLayoutAndroid。
 
@@ -129,13 +133,11 @@ $ react-native run-ios
 2. 在下图所示的蓝框中选择需要模拟的 iphone 版本
 3. 点击左侧的运行按钮，编译运行。会启动一个 simulator
 
-<p align="center" style="color:gray">xcode 运行框</p>
-
 <p align="center">
-
 <img src="https://upload-images.jianshu.io/upload_images/721960-928194b80edf6248.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" width="500px">
-
 </p>
+
+<p align="center" style="color:gray"><i>xcode 运行框</i></p>
 
 
 #### 在 device 真机运行
@@ -151,13 +153,9 @@ $ react-native run-ios
 	6. 继续选择 test target（下图蓝框部分），重复上述操作
 7. 点击运行按钮，编译运行（手机需要设置信任这个开发者账户，跟随提示操作即可）
 
-<div align="center" style="color:gray">
-xcode code signing
 
 <p align="center">
-
 <img src="https://upload-images.jianshu.io/upload_images/721960-8f980679655546c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" width=800>
-
 </p>
 
-</div>
+<p align="center" style="color:gray"><i>xcode code signing</i></p>
