@@ -129,9 +129,13 @@ $ react-native run-ios
 2. 在下图所示的蓝框中选择需要模拟的 iphone 版本
 3. 点击左侧的运行按钮，编译运行。会启动一个 simulator
 
-*xcode 运行框：*
+<p align="center" style="color:gray">xcode 运行框</p>
+
+<p align="center">
 
 <img src="https://upload-images.jianshu.io/upload_images/721960-928194b80edf6248.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" width="500px">
+
+</p>
 
 
 #### 在 device 真机运行
@@ -147,6 +151,13 @@ $ react-native run-ios
 	6. 继续选择 test target（下图蓝框部分），重复上述操作
 7. 点击运行按钮，编译运行（手机需要设置信任这个开发者账户，跟随提示操作即可）
 
-*xcode code signing：*
+<div align="center" style="color:gray">
+xcode code signing
+
+<p align="center">
 
 <img src="https://upload-images.jianshu.io/upload_images/721960-8f980679655546c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" width=800>
+
+</p>
+
+</div>
