@@ -1,0 +1,3 @@
+Object.defineProperty(exports,"__esModule",{value:true});var FETCH_URL='https://raw.githubusercontent.com/facebook/react-native/0.51-stable/docs/MoviesExample.json';function getMovies(callback){return fetch(FETCH_URL).then(function(response){return response.json();}).then(callback);}var ServerClient={getMovies:getMovies};exports.default=ServerClient;
+
+//# sourceMappingURL=src\ServerClient-compile.js.map

@@ -5,6 +5,8 @@
  */
 
 import React, {Component} from 'react';
+import ServerClient from './ServerClient';
+
 import {
   Platform,
   StyleSheet,
@@ -33,8 +35,40 @@ const instructions = Platform.select({
 type
 Props = {};
 export default class App extends Component<Props> {
+  state = {
+    movies: null,
+    test: "shold be this state"
+  };
+
+  componentDidMount() {
+    ServerClient.getMovies(data => {
+      this.setState({movies: data.movies});
+    });
+  }
+
+  renderLoadingView() {
+    return (
+      <View style={styles.container}>
+        <Text>正在加载电影数据...</Text>
+      </View>
+    );
+  }
+
   render() {
-    let movie = MOCKED_MOVIES[0];
+    if(!this.state.movies) {
+      return this.renderLoadingView();
+    }
+
+    let movie = this.state.movies[0];
+    return (
+      <Movie movie={movie} />
+    );
+  }
+}
+
+class Movie extends Component {
+  render() {
+    let movie = this.props.movie;
     return (
       <View style={styles.container}>
         <Image source={{uri: movie.posters.thumbnail}}
@@ -46,6 +80,7 @@ export default class App extends Component<Props> {
       </View>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
