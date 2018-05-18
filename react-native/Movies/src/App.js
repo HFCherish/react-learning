@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Text,
   View,
+  FlatList,
   Image
 } from 'react-native';
 
@@ -33,16 +34,19 @@ const instructions = Platform.select({
 });
 
 type
-Props = {};
+  Props = {};
 export default class App extends Component<Props> {
   state = {
-    movies: null,
-    test: "shold be this state"
+    data: [],
+    loaded: false
   };
 
   componentDidMount() {
-    ServerClient.getMovies(data => {
-      this.setState({movies: data.movies});
+    ServerClient.getMovies(json => {
+      this.setState({
+        data: this.state.data.concat(json.movies),
+        loaded: true
+      });
     });
   }
 
@@ -55,13 +59,15 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    if(!this.state.movies) {
+    if (!this.state.loaded) {
       return this.renderLoadingView();
     }
 
-    let movie = this.state.movies[0];
     return (
-      <Movie movie={movie} />
+      <View style={styles.container}>
+        {/*这里 renderItem 中必须用 item，这其实是指定 renderItem 中的属性 item，有两个 item、index*/}
+        <FlatList style={styles.movieList} data={this.state.data} renderItem={ ({item}) => (<Movie movie={item}/>)} />
+      </View>
     );
   }
 }
@@ -70,7 +76,7 @@ class Movie extends Component {
   render() {
     let movie = this.props.movie;
     return (
-      <View style={styles.container}>
+      <View style={styles.movieContainer}>
         <Image source={{uri: movie.posters.thumbnail}}
                style={styles.thumbnail}/>
         <View style={styles.rightContainer}>
@@ -84,13 +90,18 @@ class Movie extends Component {
 }
 
 const styles = StyleSheet.create({
+  movieList: {
+    paddingTop: 20
+  },
   container: {
+    flex: 1
+  },
+  movieContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-    margin: 10
   },
   rightContainer: {
     flex: 1,
@@ -103,11 +114,11 @@ const styles = StyleSheet.create({
     height: 81
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 10
   },
   year: {
-    fontSize: 12,
+    fontSize: 10,
     color: '#404956'
   }
 
