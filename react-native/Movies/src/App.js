@@ -66,7 +66,7 @@ export default class App extends Component<Props> {
     return (
       <View style={styles.container}>
         {/*这里 renderItem 中必须用 item，这其实是指定 renderItem 中的属性 item，有两个 item、index*/}
-        <FlatList style={styles.movieList} data={this.state.data} renderItem={ ({item}) => (<Movie movie={item}/>)} />
+        <FlatList style={styles.movieList} data={this.state.data} renderItem={ ({item: movie}) => <Movie movie={movie}/>} />
       </View>
     );
   }
