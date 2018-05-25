@@ -12,28 +12,43 @@ import {
   Image,
   FlatList
 } from 'react-native';
+import Client from './Client';
 
-const MOVIES = [
-  {
-    title: 'test',
-    year: 2394,
-    posters: {thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'}
-  },
-  {
-    title: 'test1',
-    year: 2394,
-    posters: {thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'}
-  }
-]
 
 type Props = {};
 export default class MovieList extends Component<Props> {
+  state = {
+    movies: [],
+    loaded: false
+  }
+
+  componentDidMount() {
+    Client.getMovies(json => {
+      this.setState({
+        movies: this.state.movies.concat(json.movies),
+        loaded: true
+      })
+    })
+  }
+
   render() {
+    if(!this.state.loaded) {
+      return this.renderLoadingView();
+    }
+
     return (
       <View style={styles.container}>
-        <FlatList data={MOVIES} renderItem={({item: movie}) => this.renderMovie(movie)}/>
+        <FlatList data={this.state.movies} renderItem={({item: movie}) => this.renderMovie(movie)}/>
       </View>
     );
+  }
+
+  renderLoadingView() {
+    return (
+      <View style={styles.container}>
+        <Text>正在加载，请稍候...</Text>
+      </View>
+    )
   }
 
   renderMovie(movie) {
