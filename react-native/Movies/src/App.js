@@ -27,7 +27,7 @@ export default class App extends Component<Props> {
     let movie = MOVIE;
     return (
       <View style={styles.container}>
-        <Image source={require('./greyson-chance.jpg')} style={styles.thumbnail} />
+        <Image source={{uri: movie.posters.thumbnail}} style={styles.thumbnail} />
         <View style={styles.movieInfo}>
           <Text style={styles.title}>{movie.title}</Text>
           <Text style={styles.year}>{movie.year}</Text>
