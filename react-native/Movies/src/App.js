@@ -6,36 +6,32 @@
 
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Image
 } from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+
+const MOVIE = {
+  title: 'test',
+  year: 2015,
+  posters: {
+    thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'
+  }
+}
 
 type Props = {};
 export default class App extends Component<Props> {
   render() {
+    let movie = MOVIE;
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-        <Text style={styles.instructions}>
-          haha from petrina
-        </Text>
+        <Image source={require('./greyson-chance.jpg')} style={styles.thumbnail} />
+        <View style={styles.movieInfo}>
+          <Text style={styles.title}>{movie.title}</Text>
+          <Text style={styles.year}>{movie.year}</Text>
+        </View>
       </View>
     );
   }
@@ -44,18 +40,31 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    margin: 20
   },
-  welcome: {
+  thumbnail: {
+    width: 53,
+    height: 81
+  },
+  movieInfo: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    flex: 1,
+    marginLeft: 20
+  },
+  title: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    marginBottom: 10
   },
-  instructions: {
+  year: {
+    fontSize: 12,
     textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    color: 'gray'
   },
 });
