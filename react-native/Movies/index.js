@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
-import MovieList from './src/MovieList';
+import App from './src/App';
 
-AppRegistry.registerComponent('Movies', () => MovieList);
+AppRegistry.registerComponent('Movies', () => App);
