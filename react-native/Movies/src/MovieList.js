@@ -9,25 +9,30 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  FlatList
 } from 'react-native';
 
 
-const MOVIE = {
-  title: 'test',
-  year: 2015,
-  posters: {
-    thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'
-  }
-}
+const MOVIE = [
+  {title: 'test', year: 2015, posters: {thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'}},
+  {title: 'test2', year: 2016, posters: {thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'}}
+  ];
 
 type Props = {};
-export default class App extends Component<Props> {
+export default class MovieList extends Component<Props> {
   render() {
-    let movie = MOVIE;
+    return (
+      <View style={styles.listContainer}>
+        <FlatList data={MOVIE} renderItem={({item: movie}) => this.renderMovie(movie)} />
+      </View>
+    )
+  }
+
+  renderMovie(movie) {
     return (
       <View style={styles.container}>
-        <Image source={{uri: movie.posters.thumbnail}} style={styles.thumbnail} />
+        <Image source={{uri: movie.posters.thumbnail}} style={styles.thumbnail}/>
         <View style={styles.movieInfo}>
           <Text style={styles.title}>{movie.title}</Text>
           <Text style={styles.year}>{movie.year}</Text>
@@ -38,13 +43,19 @@ export default class App extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    margin: 20,
+    marginTop: 40,
+    marginBottom: 40
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-    margin: 20
+    margin: 10
   },
   thumbnail: {
     width: 53,
