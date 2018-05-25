@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,21 +12,42 @@ import {
   Image,
   FlatList
 } from 'react-native';
-
-
-const MOVIE = [
-  {title: 'test', year: 2015, posters: {thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'}},
-  {title: 'test2', year: 2016, posters: {thumbnail: 'http://resizing.flixster.com/DeLpPTAwX3O2LszOpeaMHjbzuAw=/53x77/dkpu1ddg7pbsk.cloudfront.net/movie/11/16/47/11164719_ori.jpg'}}
-  ];
+import Client from './Client';
 
 type Props = {};
 export default class MovieList extends Component<Props> {
+  state = {
+    movies: [],
+    loaded: false
+  }
+
+  componentDidMount() {
+    Client.getMovies(json => {
+      this.setState({
+        movies: this.state.movies.concat(json.movies),
+        loaded: true
+      });
+    });
+  }
+
   render() {
+    if (!this.state.loaded) {
+      return this.renderWaiting();
+    }
+
     return (
       <View style={styles.listContainer}>
-        <FlatList data={MOVIE} renderItem={({item: movie}) => this.renderMovie(movie)} />
+        <FlatList data={this.state.movies} renderItem={({item: movie}) => this.renderMovie(movie)}/>
       </View>
     )
+  }
+
+  renderWaiting() {
+    return (
+      <View style={styles.container}>
+        <Text>正在加载，请稍等...</Text>
+      </View>
+    );
   }
 
   renderMovie(movie) {
@@ -69,8 +90,8 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   title: {
-    fontSize: 20,
-    textAlign: 'center',
+    fontSize: 16,
+    textAlign: 'left',
     marginBottom: 10
   },
   year: {
