@@ -1,5 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Counter from "./Counter";
+import * as ReactDOM from "react-dom";
+// import Counter from "./Counter";
+import Counter from "./CounterWithRedux";
+import counter from "./reducer";
+import {createStore} from 'redux';
 
-ReactDOM.render(<Counter />, document.getElementById('root'));
+const store = createStore(counter);
+
+
+const render = () => ReactDOM.render(
+  <Counter store={store}/>,
+  document.getElementById('root')
+);
+
+render();
+store.subscribe(render);
+

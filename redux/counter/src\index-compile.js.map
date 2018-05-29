@@ -1,0 +1,1 @@
+{"version":3,"sources":["src/index.js"],"names":[],"mappings":"AAAA,OAAO,KAAK,QAAZ,MAA0B,WAA1B;;AAEA,SAAS,MAAT","file":"src\\index-compile.js","sourcesContent":["import * as ReactDOM from \"react-dom\";\n\nReactDOM.render(\n  \n)"]}
