@@ -17,7 +17,7 @@ const Posts = ({posts}) => (
   <ul>
     {
       posts.map(post => (
-        <li>{post.title}</li>
+        <li>{post.data.title}</li>
       ))
     }
   </ul>
@@ -25,31 +25,51 @@ const Posts = ({posts}) => (
 
 class App extends Component {
   state = {
-    subreddit: 'reactjs',
-    posts: [
-      {title: 'Beginner\'s Thread / Easy Question (May 2018)'},
-      {title: 'Test Driven Development (TDD) in React &amp; React Native'},
-      {title: 'The most important lessons I’ve learned after a year of working with React'}
-    ],
-    lastUpdated: new Date()
+    selectedSubreddit: 'reactjs',
+    posts: [],
+    lastUpdated: new Date(),
+    isFetching: false
   };
+
+  componentDidMount() {
+    this.setState({
+      ...this.state,
+      isFetching: true
+    });
+
+    fetch(`https://www.reddit.com/r/${this.state.selectedSubreddit}.json`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          ...this.state,
+          posts: json.data.children,
+          lastUpdated: new Date(),
+          isFetching: false
+        })
+      })
+  }
 
   onSelect = (selectedSubreddit) => {
     this.setState({
       ...this.state,
-      subreddit: selectedSubreddit
+      selectedSubreddit: selectedSubreddit
     })
   }
 
   render() {
     return (
       <div>
-        <Picker subreddit={this.state.subreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']} />
+        <Picker subreddit={this.state.selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
         <p>
           <span>last updated at: {this.state.lastUpdated.toLocaleTimeString()}. {' '}</span>
           <button>refresh</button>
         </p>
-        <Posts posts={this.state.posts} />
+        {this.state.posts.length === 0 ?
+          this.state.isFetching ?
+            <span>Loading...</span>
+            : <span>Empth</span>
+          : <Posts posts={this.state.posts}/>
+        }
       </div>
     );
   }
