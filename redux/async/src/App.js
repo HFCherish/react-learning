@@ -56,19 +56,24 @@ class App extends Component {
 
   onSelect = (selectedSubreddit) => this.fetchPosts(selectedSubreddit)
 
+  refresh = e => {
+    e.preventDefault();
+    this.fetchPosts(this.state.selectedSubreddit);
+  }
+
   render() {
     return (
       <div>
         <Picker subreddit={this.state.selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
         <p>
           <span>last updated at: {this.state.lastUpdated.toLocaleTimeString()}. {' '}</span>
-          <button>refresh</button>
+          <button onClick={this.refresh}>refresh</button>
         </p>
         {this.state.posts.length === 0 ?
           this.state.isFetching ?
             <span>Loading...</span>
             : <span>Empth</span>
-          : <Posts posts={this.state.posts}/>
+          : <div style={{opacity: this.state.isFetching ? 0.5 : 1}}><Posts posts={this.state.posts}/></div>
         }
       </div>
     );
