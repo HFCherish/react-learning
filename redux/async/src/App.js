@@ -32,29 +32,29 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.fetchPosts(this.state.selectedSubreddit);
+  }
+
+  fetchPosts(selectedSubreddit) {
     this.setState({
       ...this.state,
       isFetching: true
     });
 
-    fetch(`https://www.reddit.com/r/${this.state.selectedSubreddit}.json`)
+    fetch(`https://www.reddit.com/r/${selectedSubreddit}.json`)
       .then(res => res.json())
       .then(json => {
         this.setState({
           ...this.state,
+          selectedSubreddit: selectedSubreddit,
           posts: json.data.children,
           lastUpdated: new Date(),
           isFetching: false
         })
-      })
+      });
   }
 
-  onSelect = (selectedSubreddit) => {
-    this.setState({
-      ...this.state,
-      selectedSubreddit: selectedSubreddit
-    })
-  }
+  onSelect = (selectedSubreddit) => this.fetchPosts(selectedSubreddit)
 
   render() {
     return (
