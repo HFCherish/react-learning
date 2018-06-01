@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Picker = ({subreddit, onSelect, options}) => (
   <span>
@@ -12,5 +13,13 @@ const Picker = ({subreddit, onSelect, options}) => (
     </select>
   </span>
 )
+
+Picker.propTypes = {
+  subreddit: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.string.isRequired
+  ).isRequired()
+}
 
 export default Picker;

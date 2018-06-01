@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Posts = ({posts}) => (
   <ul>
@@ -9,5 +10,9 @@ const Posts = ({posts}) => (
     }
   </ul>
 );
+
+Posts.propTypes = {
+  posts: PropTypes.array.isRequired
+}
 
 export default Posts
