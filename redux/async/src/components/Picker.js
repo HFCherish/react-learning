@@ -19,7 +19,7 @@ Picker.propTypes = {
   onSelect: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.string.isRequired
-  ).isRequired()
+  ).isRequired,
 }
 
 export default Picker;
