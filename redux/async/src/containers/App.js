@@ -1,27 +1,6 @@
 import React, {Component} from 'react';
-
-const Picker = ({subreddit, onSelect, options}) => (
-  <span>
-    <h1>{subreddit}</h1>
-    <select onChange={event => onSelect(event.target.value)}>
-      {
-        options.map(option => (
-          <option value={option}>{option}</option>
-        ))
-      }
-    </select>
-  </span>
-);
-
-const Posts = ({posts}) => (
-  <ul>
-    {
-      posts.map(post => (
-        <li>{post.data.title}</li>
-      ))
-    }
-  </ul>
-);
+import Picker from "../components/Picker";
+import Posts from "../components/Posts";
 
 class App extends Component {
   state = {
