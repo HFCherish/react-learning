@@ -5,19 +5,29 @@ import Posts from "../components/Posts";
 class App extends Component {
   state = {
     selectedSubreddit: 'reactjs',
-    posts: [],
-    lastUpdated: new Date(),
-    isFetching: false
+    cachedPosts: {
+      reactjs: {
+        data: [],
+        lastUpdated: new Date(),
+        isFetching: false
+      }
+    }
   };
 
   componentDidMount() {
-    this.fetchPosts(this.state.selectedSubreddit);
+    this.fetchPostsIfNeeded(this.state.selectedSubreddit);
   }
 
-  fetchPosts(selectedSubreddit) {
+  fetchPostsIfNeeded(selectedSubreddit) {
     this.setState({
       ...this.state,
-      isFetching: true
+      cachedPosts: {
+        ...this.state.cachedPosts,
+        [selectedSubreddit]: {
+          ...this.state.cachedPosts[selectedSubreddit],
+          isFetching: true
+        }
+      }
     });
 
     fetch(`https://www.reddit.com/r/${selectedSubreddit}.json`)
@@ -26,33 +36,42 @@ class App extends Component {
         this.setState({
           ...this.state,
           selectedSubreddit: selectedSubreddit,
-          posts: json.data.children,
-          lastUpdated: new Date(),
-          isFetching: false
-        })
+          cachedPosts: {
+            ...this.state.cachedPosts,
+            [selectedSubreddit]: {
+              ...this.state.cachedPosts[selectedSubreddit],
+              data: json.data.children,
+              lastUpdated: new Date(),
+              isFetching: false
+            }
+          }
+        });
       });
   }
 
-  onSelect = (selectedSubreddit) => this.fetchPosts(selectedSubreddit)
+  onSelect = (selectedSubreddit) => this.fetchPostsIfNeeded(selectedSubreddit)
 
   refresh = e => {
     e.preventDefault();
-    this.fetchPosts(this.state.selectedSubreddit);
+    this.fetchPostsIfNeeded(this.state.selectedSubreddit);
   }
 
   render() {
+    const {selectedSubreddit, cachedPosts} = this.state;
+    const selectedPosts = cachedPosts[selectedSubreddit];
+
     return (
       <div>
-        <Picker subreddit={this.state.selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
+        <Picker subreddit={selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
         <p>
-          <span>last updated at: {this.state.lastUpdated.toLocaleTimeString()}. {' '}</span>
+          <span>last updated at: {selectedPosts.lastUpdated.toLocaleTimeString()}. {' '}</span>
           <button onClick={this.refresh}>refresh</button>
         </p>
-        {this.state.posts.length === 0 ?
-          this.state.isFetching ?
+        {selectedPosts.data.length === 0 ?
+          selectedPosts.isFetching ?
             <span>Loading...</span>
-            : <span>Empth</span>
-          : <div style={{opacity: this.state.isFetching ? 0.5 : 1}}><Posts posts={this.state.posts}/></div>
+            : <span>Empty</span>
+          : <div style={{opacity: selectedPosts.isFetching ? 0.5 : 1}}><Posts posts={selectedPosts.data}/></div>
         }
       </div>
     );
