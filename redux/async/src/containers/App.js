@@ -30,7 +30,6 @@ class App extends Component {
 
   fetchPosts(selectedSubreddit) {
     this.setState( state => ({
-      ...state,
       cachedPosts: {
         ...state.cachedPosts,
         [selectedSubreddit]: {
@@ -45,7 +44,6 @@ class App extends Component {
       .then(res => res.json())
       .then(json => {
         this.setState( state => ({
-        ...state,
             cachedPosts: {
           ...state.cachedPosts,
               [selectedSubreddit]: {
@@ -63,7 +61,6 @@ class App extends Component {
 
   onSelect = (subreddit) => {
     this.setState( state => ({
-      ...state,
       selectedSubreddit: subreddit,
     }));
     this.fetchPostsIfNeeded(subreddit)
@@ -73,7 +70,6 @@ class App extends Component {
     e.preventDefault();
     const selectedSubreddit = this.state.selectedSubreddit;
     this.setState( state => ({
-      ...state,
       cachedPosts: {
         ...state.cachedPosts,
         [selectedSubreddit]: {
