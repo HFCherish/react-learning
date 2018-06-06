@@ -82,8 +82,7 @@ class App extends Component {
           isValid: false
         }
       }
-    }))
-    this.fetchPostsIfNeeded(selectedSubreddit);
+    }), () => this.fetchPostsIfNeeded(selectedSubreddit));
   }
 
   render() {
