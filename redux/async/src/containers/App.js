@@ -8,8 +8,6 @@ class App extends Component {
     cachedPosts: {}
   };
 
-
-
   componentDidMount() {
     this.fetchPostsIfNeeded(this.state.selectedSubreddit);
   }
@@ -25,7 +23,16 @@ class App extends Component {
 
     if (!cachedPost) return true;
     if (cachedPost.isFetching) return false;
+
+    if( cachedPost.isValid && this.isExpired(cachedPost.lastUpdated, 5)) {
+      this.setState(this.invalidateSubreddit(selectedSubreddit));
+      return true;
+    }
     return !cachedPost.isValid;
+  }
+
+  isExpired(lastUpdated, expirationMinutes) {
+    return new Date() - lastUpdated > expirationMinutes * 60 * 1000;
   }
 
   fetchPosts(selectedSubreddit) {
@@ -69,7 +76,11 @@ class App extends Component {
   refresh = e => {
     e.preventDefault();
     const selectedSubreddit = this.state.selectedSubreddit;
-    this.setState( state => ({
+    this.setState( this.invalidateSubreddit(selectedSubreddit), () => this.fetchPostsIfNeeded(selectedSubreddit));
+  }
+
+  invalidateSubreddit(selectedSubreddit) {
+    return state => ({
       cachedPosts: {
         ...state.cachedPosts,
         [selectedSubreddit]: {
@@ -78,7 +89,7 @@ class App extends Component {
           isValid: false
         }
       }
-    }), () => this.fetchPostsIfNeeded(selectedSubreddit));
+    });
   }
 
   render() {
