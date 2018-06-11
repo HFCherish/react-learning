@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Picker from "../components/Picker";
 import Posts from "../components/Posts";
+import {connect} from 'react-redux';
 
 class App extends Component {
   state = {
@@ -122,4 +123,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return state;
+};
+
+export default connect(mapStateToProps)(App);
