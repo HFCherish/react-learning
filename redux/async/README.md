@@ -1,6 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+对照 [react example](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async) 练习（[git 源码](https://github.com/reduxjs/redux/tree/master/examples/async)）
+
 # 不使用 redux 实现一遍
+
+代码见 `without_redux`
 
 1. 能静态显示页面，构建所有组件框架
 1. 初始化后，能从服务端获取数据
@@ -14,4 +18,21 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # 使用 redux 修改
 
+代码见 `to_redux`
+
+1. 识别 actions（根据现有代码中的 `setState` 调用）：
+    * invalidateSubreddit
+    * requestPost
+    * receivePost
+    * fetchPostsIfNeeded
+    * selectSubreddit
+2. 拆分 reducers（可根据 `state` 层级拆分，根据根属性，拆俩）
+    * 处理 selectSubreddit 的 reducer（更改 selectedSubreddit）
+    * 处理 cachedPosts 的 reducer（更改 cachedPosts）
+1. 先将 selectSubreddit 状态拆分出去，由 redux 管理
+    * connect redux store，可以连接 store state 和 app state
+    * 分别设计实现 reducer、action
+
 # 使用 redux 重写
+
+代码见 `with_redux`
