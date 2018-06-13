@@ -9,23 +9,34 @@ const selectedSubreddit = (state='reactjs', action) => {
       return state;
   }
 }
-const cachedPosts = (state={}, action) => {
+
+
+const posts = (state = {
+  isFetching: false
+}, action) => {
   switch (action.type) {
     case REQUEST_POSTS:
       return {
         ...state,
-        [action.subreddit]: {
-          ...state[action.subreddit],
-          isFetching: true
-        }
-      };
+        isFetching: true
+      }
     case RECEIVE_POSTS:
       return {
         ...state,
-        [action.subreddit]: {
-          ...state[action.subreddit],
-          isFetching: false
-        }
+        isFetching: false
+      }
+    default:
+      return state
+  }
+}
+
+const cachedPosts = (state={}, action) => {
+  switch (action.type) {
+    case REQUEST_POSTS:
+    case RECEIVE_POSTS:
+      return {
+        ...state,
+        [action.subreddit]: posts(state[action.subreddit], action)
       };
     default:
       return state;
