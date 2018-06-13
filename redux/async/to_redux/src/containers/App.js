@@ -3,11 +3,17 @@ import Picker from "../components/Picker";
 import Posts from "../components/Posts";
 import {connect} from 'react-redux';
 import {selectSubreddit, invalidateSubreddit, fetchPostsIfNeeded} from '../actions'
+import PropTypes from 'prop-types'
 
 class App extends Component {
-  state = {
-    cachedPosts: {}
-  };
+
+  static propTypes = {
+    data: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    isValid: PropTypes.bool.isRequired,
+    selectSubreddit: PropTypes.bool.isRequired,
+    lastUpdated: PropTypes.number
+  }
 
   componentDidMount() {
     this.props.dispatch(fetchPostsIfNeeded(this.props.selectedSubreddit));
@@ -26,10 +32,13 @@ class App extends Component {
   }
 
   render() {
-    const selectedSubreddit = this.props.selectedSubreddit;
-    const isFetching = this.props.isFetching;
-    const lastUpdated = this.props.lastUpdated;
-    const data = this.props.data;
+    const {
+      selectedSubreddit,
+      isFetching,
+      lastUpdated,
+      data
+    } = this.props;
+
     return (
       <div>
         <Picker subreddit={selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
