@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Picker from "../components/Picker";
 import Posts from "../components/Posts";
 import {connect} from 'react-redux';
-import {selectSubreddit} from '../actions'
+import {selectSubreddit, requestPosts, receivePosts} from '../actions'
 
 class App extends Component {
   state = {
@@ -20,16 +20,17 @@ class App extends Component {
   }
 
   shouldFetchPosts(selectedSubreddit) {
-    const cachedPost = this.state.cachedPosts[selectedSubreddit];
-
-    if (!cachedPost) return true;
-    if (cachedPost.isFetching) return false;
-
-    if (cachedPost.isValid && this.isExpired(cachedPost.lastUpdated, 5)) {
-      this.setState(this.invalidateSubreddit(selectedSubreddit));
-      return true;
-    }
-    return !cachedPost.isValid;
+    // const cachedPost = this.state.cachedPosts[selectedSubreddit];
+    //
+    // if (!cachedPost) return true;
+    // if (cachedPost.isFetching) return false;
+    //
+    // if (cachedPost.isValid && this.isExpired(cachedPost.lastUpdated, 5)) {
+    //   this.setState(this.invalidateSubreddit(selectedSubreddit));
+    //   return true;
+    // }
+    // return !cachedPost.isValid;
+    return true;
   }
 
   isExpired(lastUpdated, expirationMinutes) {
@@ -37,16 +38,7 @@ class App extends Component {
   }
 
   fetchPosts(selectedSubreddit) {
-    this.setState(state => ({
-      cachedPosts: {
-        ...state.cachedPosts,
-        [selectedSubreddit]: {
-          ...this.defaultPosts(),
-          ...state.cachedPosts[selectedSubreddit],
-          isFetching: true
-        }
-      }
-    }));
+    this.props.dispatch(requestPosts(selectedSubreddit));
 
     fetch(`https://www.reddit.com/r/${selectedSubreddit}.json`)
       .then(res => res.json())
@@ -59,11 +51,11 @@ class App extends Component {
               ...state.cachedPosts[selectedSubreddit],
               data: json.data.children,
               lastUpdated: new Date(),
-              isFetching: false,
               isValid: true
             }
           }
         }));
+        this.props.dispatch(receivePosts(selectedSubreddit));
       });
   }
 
@@ -96,19 +88,20 @@ class App extends Component {
     const {cachedPosts} = this.state;
     const selectedPosts = cachedPosts[selectedSubreddit] || this.defaultPosts();
 
+    const isFetching = this.props.isFetching;
     return (
       <div>
         <Picker subreddit={selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
         <p>
           {selectedPosts.lastUpdated &&
           <span>last updated at: {selectedPosts.lastUpdated.toLocaleTimeString()}. {' '}</span>}
-          {!selectedPosts.isFetching && <button onClick={this.refresh}>refresh</button>}
+          {!isFetching && <button onClick={this.refresh}>refresh</button>}
         </p>
         {selectedPosts.data.length === 0 ?
-          selectedPosts.isFetching ?
+          isFetching ?
             <span>Loading...</span>
             : <span>Empty</span>
-          : <div style={{opacity: selectedPosts.isFetching ? 0.5 : 1}}><Posts posts={selectedPosts.data}/></div>
+          : <div style={{opacity: isFetching ? 0.5 : 1}}><Posts posts={selectedPosts.data}/></div>
         }
       </div>
     );
@@ -117,14 +110,24 @@ class App extends Component {
   defaultPosts() {
     return {
       data: [],
-      isFetching: false,
       isValid: false
     };
   }
 }
 
 const mapStateToProps = state => {
-  return state;
+  const {selectedSubreddit, cachedPosts} = state;
+
+  const {
+    isFetching
+  } = cachedPosts[selectedSubreddit] || {
+    isFetching: false
+  };
+
+  return {
+    selectedSubreddit,
+    isFetching
+  };
 };
 
 export default connect(mapStateToProps)(App);

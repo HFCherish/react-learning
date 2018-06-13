@@ -24,14 +24,20 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     * invalidateSubreddit
     * requestPost
     * receivePost
-    * fetchPostsIfNeeded
+    * fetchPostsIfNeeded (`shouldFetchPosts` 包含对 state 的异步访问，只能在 redux store 中完成)
     * selectSubreddit
 2. 拆分 reducers（可根据 `state` 层级拆分，根据根属性，拆俩）
     * 处理 selectSubreddit 的 reducer（更改 selectedSubreddit）
-    * 处理 cachedPosts 的 reducer（更改 cachedPosts）
+    * 处理 cachedPosts 的 reducer（更改 cachedPosts
 1. 先将 selectSubreddit 状态拆分出去，由 redux 管理
     * connect redux store，可以连接 store state 和 app state
     * 分别设计实现 reducer、action
+2. 处理 cachedPosts 中 post 的各个状态(先不实现缓存)：
+    * isFetching: requestPost, receivePost
+    * isValid: invalidateSubreddit, receivePost
+    * lastUpdated: receivePost
+    * data: receivePost
+3. 利用 redux-thunk 实现缓存
 
 # 使用 redux 重写
 
