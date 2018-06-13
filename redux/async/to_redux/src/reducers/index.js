@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {RECEIVE_POSTS, REQUEST_POSTS, SELECT_SUBREDDIT} from '../actions'
+import {INVALIDATE_SUBREDDIT, RECEIVE_POSTS, REQUEST_POSTS, SELECT_SUBREDDIT} from '../actions'
 
 const selectedSubreddit = (state='reactjs', action) => {
   switch (action.type) {
@@ -12,9 +12,15 @@ const selectedSubreddit = (state='reactjs', action) => {
 
 
 const posts = (state = {
-  isFetching: false
+  isFetching: false,
+  isValid: false
 }, action) => {
   switch (action.type) {
+    case INVALIDATE_SUBREDDIT:
+      return {
+        ...state,
+        isValid: false
+      }
     case REQUEST_POSTS:
       return {
         ...state,
@@ -23,7 +29,8 @@ const posts = (state = {
     case RECEIVE_POSTS:
       return {
         ...state,
-        isFetching: false
+        isFetching: false,
+        isValid: true
       }
     default:
       return state
@@ -32,6 +39,7 @@ const posts = (state = {
 
 const cachedPosts = (state={}, action) => {
   switch (action.type) {
+    case INVALIDATE_SUBREDDIT:
     case REQUEST_POSTS:
     case RECEIVE_POSTS:
       return {

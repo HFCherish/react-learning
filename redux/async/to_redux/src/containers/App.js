@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Picker from "../components/Picker";
 import Posts from "../components/Posts";
 import {connect} from 'react-redux';
-import {selectSubreddit, requestPosts, receivePosts} from '../actions'
+import {selectSubreddit, requestPosts, receivePosts, invalidateSubreddit} from '../actions'
 
 class App extends Component {
   state = {
@@ -51,7 +51,6 @@ class App extends Component {
               ...state.cachedPosts[selectedSubreddit],
               data: json.data.children,
               lastUpdated: new Date(),
-              isValid: true
             }
           }
         }));
@@ -67,20 +66,8 @@ class App extends Component {
   refresh = e => {
     e.preventDefault();
     const selectedSubreddit = this.props.selectedSubreddit;
-    this.setState(this.invalidateSubreddit(selectedSubreddit), () => this.fetchPostsIfNeeded(selectedSubreddit));
-  }
-
-  invalidateSubreddit(selectedSubreddit) {
-    return state => ({
-      cachedPosts: {
-        ...state.cachedPosts,
-        [selectedSubreddit]: {
-          ...this.defaultPosts(),
-          ...state.cachedPosts[selectedSubreddit],
-          isValid: false
-        }
-      }
-    });
+    this.props.dispatch(invalidateSubreddit(selectedSubreddit));
+    this.fetchPostsIfNeeded(selectedSubreddit);
   }
 
   render() {
@@ -110,7 +97,6 @@ class App extends Component {
   defaultPosts() {
     return {
       data: [],
-      isValid: false
     };
   }
 }

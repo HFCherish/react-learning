@@ -1,6 +1,7 @@
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT';
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT';
 
 export const selectSubreddit = subreddit => ({
   type: SELECT_SUBREDDIT,
@@ -16,3 +17,8 @@ export const receivePosts = subreddit => ({
   type: RECEIVE_POSTS,
   subreddit
 });
+
+export const invalidateSubreddit = subreddit => ({
+  type: INVALIDATE_SUBREDDIT,
+  subreddit
+})
