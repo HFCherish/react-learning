@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Picker from "../components/Picker";
 import Posts from "../components/Posts";
 import {connect} from 'react-redux';
-import {selectSubreddit, requestPosts, receivePosts, invalidateSubreddit} from '../actions'
+import {selectSubreddit, invalidateSubreddit, fetchPostsIfNeeded} from '../actions'
 
 class App extends Component {
   state = {
@@ -10,53 +10,19 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.fetchPostsIfNeeded(this.props.selectedSubreddit);
-  }
-
-  fetchPostsIfNeeded(selectedSubreddit) {
-    if (this.shouldFetchPosts(selectedSubreddit)) {
-      this.fetchPosts(selectedSubreddit);
-    }
-  }
-
-  shouldFetchPosts(selectedSubreddit) {
-    // const cachedPost = this.state.cachedPosts[selectedSubreddit];
-    //
-    // if (!cachedPost) return true;
-    // if (cachedPost.isFetching) return false;
-    //
-    // if (cachedPost.isValid && this.isExpired(cachedPost.lastUpdated, 5)) {
-    //   this.setState(this.invalidateSubreddit(selectedSubreddit));
-    //   return true;
-    // }
-    // return !cachedPost.isValid;
-    return true;
-  }
-
-  isExpired(lastUpdated, expirationMinutes) {
-    return new Date() - lastUpdated > expirationMinutes * 60 * 1000;
-  }
-
-  fetchPosts(selectedSubreddit) {
-    this.props.dispatch(requestPosts(selectedSubreddit));
-
-    fetch(`https://www.reddit.com/r/${selectedSubreddit}.json`)
-      .then(res => res.json())
-      .then(json => {
-        this.props.dispatch(receivePosts(selectedSubreddit, json));
-      });
+    this.props.dispatch(fetchPostsIfNeeded(this.props.selectedSubreddit));
   }
 
   onSelect = (subreddit) => {
     this.props.dispatch(selectSubreddit(subreddit));
-    this.fetchPostsIfNeeded(subreddit)
+    this.props.dispatch(fetchPostsIfNeeded(subreddit));
   }
 
   refresh = e => {
     e.preventDefault();
     const selectedSubreddit = this.props.selectedSubreddit;
     this.props.dispatch(invalidateSubreddit(selectedSubreddit));
-    this.fetchPostsIfNeeded(selectedSubreddit);
+    this.props.dispatch(fetchPostsIfNeeded(selectedSubreddit));
   }
 
   render() {

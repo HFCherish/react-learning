@@ -23,3 +23,36 @@ export const invalidateSubreddit = subreddit => ({
   type: INVALIDATE_SUBREDDIT,
   subreddit
 })
+
+export const fetchPostsIfNeeded = selectedSubreddit => (dispatch, getState) => {
+  if (shouldFetchPosts(selectedSubreddit, getState(), dispatch)) {
+    fetchPosts(selectedSubreddit, dispatch);
+  }
+};
+
+function shouldFetchPosts(selectedSubreddit, state, dispatch) {
+  const cachedPost = state.cachedPosts[selectedSubreddit];
+
+  if (!cachedPost) return true;
+  if (cachedPost.isFetching) return false;
+
+  if (cachedPost.isValid && isExpired(cachedPost.lastUpdated, 5)) {
+    dispatch(invalidateSubreddit(selectedSubreddit));
+    return true;
+  }
+  return !cachedPost.isValid;
+}
+
+function isExpired(lastUpdated, expirationMinutes) {
+  return new Date() - lastUpdated > expirationMinutes * 60 * 1000;
+}
+
+function fetchPosts(selectedSubreddit, dispatch) {
+  dispatch(requestPosts(selectedSubreddit));
+
+  fetch(`https://www.reddit.com/r/${selectedSubreddit}.json`)
+    .then(res => res.json())
+    .then(json => {
+      dispatch(receivePosts(selectedSubreddit, json));
+    });
+}
