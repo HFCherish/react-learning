@@ -50,7 +50,6 @@ class App extends Component {
               ...this.defaultPosts(),
               ...state.cachedPosts[selectedSubreddit],
               data: json.data.children,
-              lastUpdated: new Date(),
             }
           }
         }));
@@ -76,12 +75,13 @@ class App extends Component {
     const selectedPosts = cachedPosts[selectedSubreddit] || this.defaultPosts();
 
     const isFetching = this.props.isFetching;
+    const lastUpdated = this.props.lastUpdated;
     return (
       <div>
         <Picker subreddit={selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
         <p>
-          {selectedPosts.lastUpdated &&
-          <span>last updated at: {selectedPosts.lastUpdated.toLocaleTimeString()}. {' '}</span>}
+          {lastUpdated &&
+          <span>last updated at: {lastUpdated.toLocaleTimeString()}. {' '}</span>}
           {!isFetching && <button onClick={this.refresh}>refresh</button>}
         </p>
         {selectedPosts.data.length === 0 ?
@@ -105,14 +105,16 @@ const mapStateToProps = state => {
   const {selectedSubreddit, cachedPosts} = state;
 
   const {
-    isFetching
+    isFetching,
+    lastUpdated
   } = cachedPosts[selectedSubreddit] || {
-    isFetching: false
+    isFetching: false,
   };
 
   return {
     selectedSubreddit,
-    isFetching
+    isFetching,
+    lastUpdated
   };
 };
 

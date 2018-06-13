@@ -30,7 +30,8 @@ const posts = (state = {
       return {
         ...state,
         isFetching: false,
-        isValid: true
+        isValid: true,
+        lastUpdated: new Date()
       }
     default:
       return state
