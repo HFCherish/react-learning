@@ -13,7 +13,8 @@ const selectedSubreddit = (state='reactjs', action) => {
 
 const posts = (state = {
   isFetching: false,
-  isValid: false
+  isValid: false,
+  data: []
 }, action) => {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
@@ -31,7 +32,8 @@ const posts = (state = {
         ...state,
         isFetching: false,
         isValid: true,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
+        data: action.json.data.children
       }
     default:
       return state

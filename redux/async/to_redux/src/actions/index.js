@@ -13,9 +13,10 @@ export const requestPosts = subreddit => ({
   subreddit
 });
 
-export const receivePosts = subreddit => ({
+export const receivePosts = (subreddit, json) => ({
   type: RECEIVE_POSTS,
-  subreddit
+  subreddit,
+  json
 });
 
 export const invalidateSubreddit = subreddit => ({

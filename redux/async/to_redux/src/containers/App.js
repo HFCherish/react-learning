@@ -43,17 +43,7 @@ class App extends Component {
     fetch(`https://www.reddit.com/r/${selectedSubreddit}.json`)
       .then(res => res.json())
       .then(json => {
-        this.setState(state => ({
-          cachedPosts: {
-            ...state.cachedPosts,
-            [selectedSubreddit]: {
-              ...this.defaultPosts(),
-              ...state.cachedPosts[selectedSubreddit],
-              data: json.data.children,
-            }
-          }
-        }));
-        this.props.dispatch(receivePosts(selectedSubreddit));
+        this.props.dispatch(receivePosts(selectedSubreddit, json));
       });
   }
 
@@ -71,11 +61,9 @@ class App extends Component {
 
   render() {
     const selectedSubreddit = this.props.selectedSubreddit;
-    const {cachedPosts} = this.state;
-    const selectedPosts = cachedPosts[selectedSubreddit] || this.defaultPosts();
-
     const isFetching = this.props.isFetching;
     const lastUpdated = this.props.lastUpdated;
+    const data = this.props.data;
     return (
       <div>
         <Picker subreddit={selectedSubreddit} onSelect={this.onSelect} options={['reactjs', 'frontend']}/>
@@ -84,20 +72,14 @@ class App extends Component {
           <span>last updated at: {lastUpdated.toLocaleTimeString()}. {' '}</span>}
           {!isFetching && <button onClick={this.refresh}>refresh</button>}
         </p>
-        {selectedPosts.data.length === 0 ?
+        {data.length === 0 ?
           isFetching ?
             <span>Loading...</span>
             : <span>Empty</span>
-          : <div style={{opacity: isFetching ? 0.5 : 1}}><Posts posts={selectedPosts.data}/></div>
+          : <div style={{opacity: isFetching ? 0.5 : 1}}><Posts posts={data}/></div>
         }
       </div>
     );
-  }
-
-  defaultPosts() {
-    return {
-      data: [],
-    };
   }
 }
 
@@ -106,15 +88,18 @@ const mapStateToProps = state => {
 
   const {
     isFetching,
-    lastUpdated
+    lastUpdated,
+    data
   } = cachedPosts[selectedSubreddit] || {
     isFetching: false,
+    data: []
   };
 
   return {
     selectedSubreddit,
     isFetching,
-    lastUpdated
+    lastUpdated,
+    data
   };
 };
 
