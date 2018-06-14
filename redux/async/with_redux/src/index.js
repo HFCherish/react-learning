@@ -6,18 +6,7 @@ import {createLogger} from 'redux-logger';
 import reducers from './reducers';
 import {Provider} from 'react-redux';
 
-const store = createStore(reducers, {
-  posts: {
-    isFetching: false,
-    selectedSubreddit: 'reactjs',
-    lastUpdated: new Date(),
-    data: [
-      {'title': 'balabal'},
-      {'title': 'fjkdl'},
-      {'title': 'dslkkf'},
-    ]
-  }
-}, applyMiddleware(createLogger()));
+const store = createStore(reducers, applyMiddleware(createLogger()));
 
 render(<Provider store={store}>
   <App/>
