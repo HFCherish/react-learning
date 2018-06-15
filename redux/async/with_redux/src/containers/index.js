@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Picker from '../components/Picker';
 import Posts from '../components/Posts';
 import {connect} from 'react-redux';
-import {fetchPosts} from '../actions';
+import {fetchPosts, selecetSubreddit} from '../actions';
 
 class App extends Component {
   componentDidMount() {
@@ -11,7 +11,10 @@ class App extends Component {
 
   refresh = () => {}
 
-  onSelect = nextSelected => {}
+  onSelect = nextSelected => {
+    this.props.dispatch(selecetSubreddit(nextSelected));
+    this.props.dispatch(fetchPosts(nextSelected));
+  }
 
   render() {
     const {lastUpdated, isFetching, data, selectedSubreddit} = this.props;
