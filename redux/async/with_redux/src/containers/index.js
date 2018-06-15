@@ -25,7 +25,7 @@ class App extends Component {
     return (<div>
       <Picker onSelect={this.onSelect} options={['reactjs', 'frontend']} selected={selectedSubreddit}/>
       <p>
-        {lastUpdated && <span>lastUpdated at {lastUpdated.toLocaleString()}</span>}
+        {lastUpdated && <span>Last updated at {lastUpdated.toLocaleString()}</span>}
         {' '}
         {lastUpdated && !isFetching && <button onClick={this.refresh}>Refresh</button>}
       </p>

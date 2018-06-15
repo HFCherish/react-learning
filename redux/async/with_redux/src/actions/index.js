@@ -14,16 +14,23 @@ export const requestPosts = (subreddit) => ({
   subreddit
 });
 
-const shouldFetchPosts = (subreddit, state) => {
-  // const {data, isFetching, isValid} = state;
-  // if( isFetching )  return false;
-  // if( !data )  return true;
-  // return !isValid;
-  return true;
+const shouldFetchPosts = (subreddit, state, dispatch) => {
+  const selectedPosts = state.cachedPosts[subreddit];
+  if( !selectedPosts )  return true;
+  if( selectedPosts.isFetching )  return false;
+  if( selectedPosts.isValid && expired(selectedPosts.lastUpdated, 5) ) {
+    dispatch(invalidateSubreddit(subreddit));
+    return true;
+  }
+  return !selectedPosts.isValid;
+}
+
+const expired = (realDate, expirationMinutes ) => {
+  return new Date() - realDate > expirationMinutes * 60 * 1000
 }
 
 export const fetchPosts = subreddit => (dispatch, getState) => {
-  if(shouldFetchPosts(subreddit, getState())) {
+  if(shouldFetchPosts(subreddit, getState(), dispatch)) {
     dispatch(requestPosts(subreddit));
     fetch(`https://www.reddit.com/r/${subreddit}.json`)
     .then(res => res.json())
