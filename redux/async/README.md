@@ -2,6 +2,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 对照 [react example](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/async) 练习（[git 源码](https://github.com/reduxjs/redux/tree/master/examples/async)）
 
+运行：
+
+```sh
+$ cd with_redux/
+$ npm install
+$ npm start
+```
+
 # 不使用 redux 实现一遍
 
 代码见 `without_redux`

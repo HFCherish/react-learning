@@ -2,8 +2,13 @@ import React, {Component} from 'react';
 import Picker from '../components/Picker';
 import Posts from '../components/Posts';
 import {connect} from 'react-redux';
+import {fetchPosts} from '../actions';
 
 class App extends Component {
+  componentDidMount() {
+    this.props.dispatch(fetchPosts(this.props.selectedSubreddit));
+  }
+
   refresh = () => {}
 
   onSelect = nextSelected => {}
