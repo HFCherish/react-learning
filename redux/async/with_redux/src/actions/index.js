@@ -1,6 +1,7 @@
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT';
 export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT';
+export const REQUEST_POSTS = 'REQUEST_POSTS';
 
 export const receivePosts = (subreddit, json) => ({
   type: RECEIVE_POSTS,
@@ -8,7 +9,13 @@ export const receivePosts = (subreddit, json) => ({
   subreddit
 });
 
+export const requestPosts = (subreddit) => ({
+  type: REQUEST_POSTS,
+  subreddit
+});
+
 export const fetchPosts = subreddit => (dispatch) => {
+  dispatch(requestPosts(subreddit));
   fetch(`https://www.reddit.com/r/${subreddit}.json`)
   .then(res => res.json())
   .then(json => dispatch(receivePosts(subreddit, json)));

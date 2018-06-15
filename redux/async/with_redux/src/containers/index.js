@@ -31,7 +31,7 @@ class App extends Component {
       </p>
       {
         data.length === 0
-          ? <span>{isFetching? 'Loading' : 'Empty'}</span>
+          ? <span>{isFetching? 'Loading...' : 'Empty'}</span>
           : <div style={{opacity: isValid ? 1 : 0.5}}><Posts data={data}/></div>
       }
     </div>);

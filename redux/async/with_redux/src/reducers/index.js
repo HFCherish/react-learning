@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {RECEIVE_POSTS, SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT} from '../actions';
+import {RECEIVE_POSTS, SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT, REQUEST_POSTS} from '../actions';
 
 const posts = (state={
   isFetching: false,
@@ -7,6 +7,11 @@ const posts = (state={
   isValid: false,
   data: []}, action) => {
     switch (action.type) {
+      case REQUEST_POSTS:
+        return {
+          ...state,
+          isFetching: true
+        }
       case RECEIVE_POSTS:
         return {
           ...state,
