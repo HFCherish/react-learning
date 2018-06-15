@@ -39,13 +39,17 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
+  const {selectedSubreddit, cachedPosts} = state;
   const {
     isFetching,
     data,
     lastUpdated,
-    selectedSubreddit,
     isValid
-  } = state.posts;
+  } = cachedPosts[selectedSubreddit] || {
+    isFetching: false,
+    isValid: false,
+    data: []
+  };
 
   return {
     isFetching,

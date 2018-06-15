@@ -14,11 +14,21 @@ export const requestPosts = (subreddit) => ({
   subreddit
 });
 
-export const fetchPosts = subreddit => (dispatch) => {
-  dispatch(requestPosts(subreddit));
-  fetch(`https://www.reddit.com/r/${subreddit}.json`)
-  .then(res => res.json())
-  .then(json => dispatch(receivePosts(subreddit, json)));
+const shouldFetchPosts = (subreddit, state) => {
+  // const {data, isFetching, isValid} = state;
+  // if( isFetching )  return false;
+  // if( !data )  return true;
+  // return !isValid;
+  return true;
+}
+
+export const fetchPosts = subreddit => (dispatch, getState) => {
+  if(shouldFetchPosts(subreddit, getState())) {
+    dispatch(requestPosts(subreddit));
+    fetch(`https://www.reddit.com/r/${subreddit}.json`)
+    .then(res => res.json())
+    .then(json => dispatch(receivePosts(subreddit, json)));
+  }
 }
 
 export const selecetSubreddit = subreddit => ({
