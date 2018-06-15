@@ -9,7 +9,9 @@ class App extends Component {
     this.props.dispatch(fetchPosts(this.props.selectedSubreddit));
   }
 
-  refresh = () => {}
+  refresh = () => {
+    this.props.dispatch(fetchPosts(this.props.selectedSubreddit));
+  }
 
   onSelect = nextSelected => {
     this.props.dispatch(selecetSubreddit(nextSelected));
