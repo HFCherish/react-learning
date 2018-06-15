@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Picker from '../components/Picker';
 import Posts from '../components/Posts';
 import {connect} from 'react-redux';
-import {fetchPosts, selecetSubreddit} from '../actions';
+import {fetchPosts, selecetSubreddit, invalidateSubreddit} from '../actions';
 
 class App extends Component {
   componentDidMount() {
@@ -10,6 +10,7 @@ class App extends Component {
   }
 
   refresh = () => {
+    this.props.dispatch(invalidateSubreddit(this.props.selectedSubreddit));
     this.props.dispatch(fetchPosts(this.props.selectedSubreddit));
   }
 
@@ -19,7 +20,7 @@ class App extends Component {
   }
 
   render() {
-    const {lastUpdated, isFetching, data, selectedSubreddit} = this.props;
+    const {lastUpdated, isFetching, data, selectedSubreddit, isValid} = this.props;
 
     return (<div>
       <Picker onSelect={this.onSelect} options={['reactjs', 'frontend']} selected={selectedSubreddit}/>
@@ -31,7 +32,7 @@ class App extends Component {
       {
         data.length === 0
           ? <span>{isFetching? 'Loading' : 'Empty'}</span>
-          : <div style={{opacity: isFetching ? 0.5 : 1}}><Posts data={data}/></div>
+          : <div style={{opacity: isValid ? 1 : 0.5}}><Posts data={data}/></div>
       }
     </div>);
   }
@@ -42,14 +43,16 @@ const mapStateToProps = state => {
     isFetching,
     data,
     lastUpdated,
-    selectedSubreddit
+    selectedSubreddit,
+    isValid
   } = state.posts;
 
   return {
     isFetching,
     data,
     lastUpdated,
-    selectedSubreddit
+    selectedSubreddit,
+    isValid,
   };
 }
 

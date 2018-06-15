@@ -1,9 +1,10 @@
 import {combineReducers} from 'redux';
-import {RECEIVE_POSTS, SELECT_SUBREDDIT} from '../actions';
+import {RECEIVE_POSTS, SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT} from '../actions';
 
 const posts = (state={
   isFetching: false,
   selectedSubreddit: 'reactjs',
+  isValid: false,
   data: []}, action) => {
     switch (action.type) {
       case RECEIVE_POSTS:
@@ -12,13 +13,20 @@ const posts = (state={
           data: action.data,
           selectedSubreddit: action.subreddit,
           lastUpdated: new Date(),
-          isFetching: false
+          isFetching: false,
+          isValid: true
         }
       case SELECT_SUBREDDIT:
         return {
           ...state,
           selectedSubreddit: action.subreddit,
           isFetching: false
+        }
+      case INVALIDATE_SUBREDDIT:
+        return {
+          ...state,
+          isFetching: false,
+          isValid: false
         }
       default:
         return state
